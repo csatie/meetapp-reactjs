@@ -5,30 +5,14 @@ export const Container = styled.div`
   max-width: 940px;
   margin: 50px auto;
 
-  form {
+  header {
     display: flex;
-    flex-direction: column;
-    margin-top: 50px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
 
-    input {
-      background: rgba(0, 0, 0, 0.2);
-      border: 0;
-      border-radius: 4px;
-      height: 50px;
-      padding: 0 15px;
+    h1 {
       color: #fff;
-      margin: 0 0 10px;
-
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-      }
-    }
-
-    span {
-      color: #f94d6a;
-      align-self: flex-start;
-      margin: 0 0 10px;
-      font-weight: bold;
     }
 
     button {
@@ -54,12 +38,24 @@ export const Container = styled.div`
         background: ${lighten(0.03, '#f94d6a')};
       }
     }
+  }
+`;
 
-    hr {
-      border: 0;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.2);
-      margin: 20px 0 15px;
-    }
+export const Meetup = styled.li`
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  color: #fff;
+  padding: 20px;
+
+  span {
+    align-items: center;
+    display: flex;
+    opacity: 0.6;
+    font-size: 14px;
   }
 `;
