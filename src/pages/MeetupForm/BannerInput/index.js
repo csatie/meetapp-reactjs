@@ -1,21 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useField } from '@rocketseat/unform';
+import { MdPhotoCamera } from 'react-icons/md';
+
 import api from '~/services/api';
 
 import { Container } from './styles';
 
 export default function BannerInput() {
-  const { defaultValue, registerField } = useField('file_id');
+  const { defaultValue, registerField } = useField('file');
 
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
-
-  useEffect(() => {
-    if (defaultValue) {
-      setFile(defaultValue.id);
-      setPreview(defaultValue.url);
-    }
-  }, [defaultValue]);
 
   const ref = useRef();
 
@@ -27,7 +22,11 @@ export default function BannerInput() {
         path: 'dataset.file',
       });
     }
-  }, [ref, registerField]);
+    if (defaultValue) {
+      setFile(defaultValue.id);
+      setPreview(defaultValue.url);
+    }
+  }, [defaultValue,ref.current]);// eslint-disable-line
 
   async function handleChange(e) {
     const data = new FormData();
@@ -36,6 +35,7 @@ export default function BannerInput() {
     const response = await api.post('files', data);
 
     const { id, url } = response.data;
+    console.tron.log(response.data);
 
     setFile(id);
     setPreview(url);
@@ -44,7 +44,14 @@ export default function BannerInput() {
   return (
     <Container>
       <label htmlFor="file">
-        <img src={preview} alt="" />
+        {preview ? (
+          <img src={preview} alt="" />
+        ) : (
+          <div className="selectImg">
+            <MdPhotoCamera size={48} color="#FFF" />
+            <span>Selecionar imagem</span>
+          </div>
+        )}
 
         <input
           type="file"

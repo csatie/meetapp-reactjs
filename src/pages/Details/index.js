@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
 import { MdDeleteForever, MdEdit, MdToday, MdRoom } from 'react-icons/md';
+import history from '~/services/history';
 import api from '~/services/api';
 
 import { Container, Content } from './styles';
@@ -30,7 +32,17 @@ export default function Detail({ match }) {
     }
     loadMeetup();
   }, [id]);
-  console.tron.log(meetup);
+
+  async function handleDelete() {
+    try {
+      await api.delete(`/meetups/${id}`);
+      toast.success('Meetup cancelado');
+      history.push('/dashboard');
+    } catch (error) {
+      console.tron.log(error);
+      toast.error('Erro ao cancelar');
+    }
+  }
 
   return (
     <Container>
@@ -48,7 +60,7 @@ export default function Detail({ match }) {
             </button>
           </Link>
           <Link to="/details">
-            <button type="button">
+            <button type="button" onClick={() => handleDelete()}>
               <MdDeleteForever size={20} />
               <span>Cancelar</span>
             </button>

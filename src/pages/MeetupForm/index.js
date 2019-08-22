@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 import { format, parseISO } from 'date-fns';
@@ -8,6 +9,8 @@ import * as Yup from 'yup';
 
 import { MdAddCircleOutline } from 'react-icons/md';
 import api from '~/services/api';
+
+import BannerInput from './BannerInput';
 
 import { Container } from './styles';
 
@@ -34,24 +37,50 @@ const schema = Yup.object().shape({
 */
 export default function MeetupForm({ match }) {
   const { id } = match.params;
+
   const dispatch = useDispatch();
   const [meetup, setMeetup] = useState([]);
 
   useEffect(() => {
     async function loadMeetup() {
       const response = await api.get(`meetups/${id}`);
-
-      setMeetup(response.data);
+      const data = {
+        ...response.data,
+        formattedDate: format(
+          parseISO(response.data.date),
+          `dd 'de' MMMM, 'às' HH'h'`,
+          { locale: pt }
+        ),
+        file: response.data.file,
+      };
+      setMeetup(data);
     }
     loadMeetup();
   }, [id]);
 
-  function handleSubmit(data) {}
+  async function handleSubmit(data) {
+    try {
+      const meetupData = {
+        ...data,
+      };
+      if (id) {
+        await api.put(`meetups/${id}`, meetupData);
+        toast.success('Meetup atualizado com sucesso');
+      } else {
+        await api.post('meetups', meetupData);
+        toast.success('Meetup criado com sucesso');
+      }
+    } catch (error) {
+      console.tron.log(data);
+      toast.error('Erro ao inserir meetup');
+    }
+  }
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit}>
-        <Input name="name" placeholder="Título do meetup" value={meetup.name} />
+      <Form initialData={meetup} onSubmit={handleSubmit}>
+        <BannerInput name="file_id" />
+        <Input name="name" placeholder="Título do meetup" />
         <Input name="description" placeholder="Descrição completa" multiline />
         <Input name="date" placeholder="Data do meetup" />
         <Input name="location" placeholder="Localização" />
