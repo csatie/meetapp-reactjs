@@ -16,27 +16,14 @@ import BannerInput from './BannerInput';
 import { Container } from './styles';
 import 'react-datepicker/dist/react-datepicker.css';
 
-/*
 const schema = Yup.object().shape({
-  name: Yup.string().required('Nome obrigatório'),
-  email: Yup.string()
-    .email('Email inválido')
-    .required('Email obrigatório'),
-  oldPassword: Yup.string(),
-  password: Yup.string().when('oldPassword', (oldPassword, field) =>
-    oldPassword
-      ? field.min(6, 'No mínimo 6 caracteres').required('Preencha nova senha')
-      : field
-  ),
-  confirmPassword: Yup.string().when('password', (password, field) =>
-    password
-      ? field
-          .required('Confirme senha')
-          .oneOf([Yup.ref('password')], 'Confirme senha')
-      : field
-  ),
+  name: Yup.string().required('Título obrigatório'),
+  description: Yup.string().required('Descrição obrigatória'),
+  date: Yup.date(),
+  location: Yup.string().required('Localização obrigatória'),
+  file_id: Yup.number(),
 });
-*/
+
 export default function MeetupForm({ match }) {
   const { id } = match.params;
 
@@ -88,12 +75,13 @@ export default function MeetupForm({ match }) {
 
   return (
     <Container>
-      <Form initialData={meetup} onSubmit={handleSubmit}>
+      <Form initialData={meetup} schema={schema} onSubmit={handleSubmit}>
         <BannerInput name="file_id" />
         <Input name="name" placeholder="Título do meetup" />
         <Input name="description" placeholder="Descrição completa" multiline />
         <DatePicker
           name="date"
+          placeholderText="Data e hora"
           selected={startDate || meetup.date}
           onChange={handleChange}
           showTimeSelect
