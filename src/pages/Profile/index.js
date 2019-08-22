@@ -13,6 +13,19 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email('Email inválido')
     .required('Email obrigatório'),
+  oldPassword: Yup.string(),
+  password: Yup.string().when('oldPassword', (oldPassword, field) =>
+    oldPassword
+      ? field.min(6, 'No mínimo 6 caracteres').required('Preencha nova senha')
+      : field
+  ),
+  confirmPassword: Yup.string().when('password', (password, field) =>
+    password
+      ? field
+          .required('Confirme senha')
+          .oneOf([Yup.ref('password')], 'Confirme senha')
+      : field
+  ),
 });
 
 export default function Profile() {
@@ -43,7 +56,7 @@ export default function Profile() {
 
         <button type="submit">
           <MdAddCircleOutline size={20} />
-          Salvar perfil
+          <span>Salvar perfil</span>
         </button>
       </Form>
     </Container>

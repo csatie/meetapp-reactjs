@@ -1,7 +1,84 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { format, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
-// import { Container } from './styles';
+import { MdDeleteForever, MdEdit, MdToday, MdRoom } from 'react-icons/md';
+import api from '~/services/api';
 
-export default function Details() {
-  return <div />;
+import { Container, Content } from './styles';
+
+export default function Detail({ match }) {
+  const { id } = match.params;
+  const [meetup, setMeetup] = useState([]);
+
+  useEffect(() => {
+    async function loadMeetup() {
+      const response = await api.get(`meetups/${id}`);
+      const data = {
+        ...response.data,
+        formattedDate: format(
+          parseISO(response.data.date),
+          `dd 'de' MMMM, 'às' HH'h'`,
+          { locale: pt }
+        ),
+        file: response.data.file.url,
+      };
+
+      setMeetup(data);
+    }
+    loadMeetup();
+  }, [id]);
+  console.tron.log(meetup);
+
+  return (
+    <Container>
+      <header>
+        <h1>{meetup.name}</h1>
+        <div>
+          <Link
+            to={{
+              pathname: `/edit/${id}`,
+            }}
+          >
+            <button type="button" className="btnBlue">
+              <MdEdit size={20} />
+              <span>Editar</span>
+            </button>
+          </Link>
+          <Link to="/details">
+            <button type="button">
+              <MdDeleteForever size={20} />
+              <span>Cancelar</span>
+            </button>
+          </Link>
+        </div>
+      </header>
+      <Content>
+        <img src={meetup.file} alt="" />
+
+        <p>{meetup.description}</p>
+
+        <div>
+          <span>
+            <MdToday size={18} />
+            {meetup.formattedDate}
+          </span>
+          <span>
+            <MdRoom size={18} />
+            {meetup.location}
+          </span>
+        </div>
+      </Content>
+    </Container>
+  );
 }
+
+Detail.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
+};

@@ -52,6 +52,8 @@ export const Meetup = styled.li`
   color: #fff;
   padding: 20px;
 
+  opacity: ${props => (props.past ? 0.6 : 1)};
+
   span {
     align-items: center;
     display: flex;

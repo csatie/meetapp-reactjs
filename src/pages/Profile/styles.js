@@ -47,7 +47,9 @@ export const Container = styled.div`
       align-self: flex-end;
 
       span {
-        margin-left: 6px;
+        margin: 0 0 0 6px;
+        color: #fff;
+        align-self: center;
       }
 
       &:hover {
