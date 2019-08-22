@@ -20,7 +20,7 @@ export default function Dashboard() {
           ...meetup,
           formattedDate: format(
             parseISO(meetup.date),
-            `dd 'de' MMMM, 'às' HH'h'`,
+            `dd 'de' MMMM, 'às' HH'h'mm`,
             { locale: pt }
           ),
         };

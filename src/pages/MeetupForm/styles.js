@@ -30,14 +30,14 @@ export const Container = styled.div`
       height: 200px;
     }
 
-    span {
+    > span {
       color: #f94d6a;
       align-self: flex-start;
       margin: 0 0 10px;
       font-weight: bold;
     }
 
-    button {
+    > button {
       display: flex;
       align-items: center;
       margin: 5px 0 0;
@@ -68,6 +68,11 @@ export const Container = styled.div`
       height: 1px;
       background: rgba(255, 255, 255, 0.2);
       margin: 20px 0 15px;
+    }
+
+    .react-datepicker-wrapper div,
+    .react-datepicker-wrapper div input {
+      width: 100%;
     }
   }
 `;

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
-import { format, parseISO } from 'date-fns';
+import DatePicker from 'react-datepicker';
+import { subDays, format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import * as Yup from 'yup';
 
@@ -13,6 +14,7 @@ import api from '~/services/api';
 import BannerInput from './BannerInput';
 
 import { Container } from './styles';
+import 'react-datepicker/dist/react-datepicker.css';
 
 /*
 const schema = Yup.object().shape({
@@ -40,15 +42,17 @@ export default function MeetupForm({ match }) {
 
   const dispatch = useDispatch();
   const [meetup, setMeetup] = useState([]);
+  const [startDate, setDate] = useState();
 
   useEffect(() => {
     async function loadMeetup() {
       const response = await api.get(`meetups/${id}`);
       const data = {
         ...response.data,
+        date: new Date(response.data.date),
         formattedDate: format(
           parseISO(response.data.date),
-          `dd 'de' MMMM, 'às' HH'h'`,
+          `dd 'de' MMMM, 'às' HH'h'mm`,
           { locale: pt }
         ),
         file: response.data.file,
@@ -58,10 +62,16 @@ export default function MeetupForm({ match }) {
     loadMeetup();
   }, [id]);
 
+  function handleChange(date) {
+    setDate(date);
+    console.tron.log(date);
+  }
+
   async function handleSubmit(data) {
     try {
       const meetupData = {
         ...data,
+        date: startDate,
       };
       if (id) {
         await api.put(`meetups/${id}`, meetupData);
@@ -82,7 +92,18 @@ export default function MeetupForm({ match }) {
         <BannerInput name="file_id" />
         <Input name="name" placeholder="Título do meetup" />
         <Input name="description" placeholder="Descrição completa" multiline />
-        <Input name="date" placeholder="Data do meetup" />
+        <DatePicker
+          name="date"
+          selected={startDate || meetup.date}
+          onChange={handleChange}
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          dateFormat="dd 'de' MMMM, 'às' HH'h'mm"
+          timeCaption="time"
+          minDate={subDays(new Date(), 0)}
+          locale={pt}
+        />
         <Input name="location" placeholder="Localização" />
 
         <button type="submit">

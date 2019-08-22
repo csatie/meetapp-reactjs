@@ -22,7 +22,7 @@ export default function Detail({ match }) {
         ...response.data,
         formattedDate: format(
           parseISO(response.data.date),
-          `dd 'de' MMMM, 'às' HH'h'`,
+          `dd 'de' MMMM, 'às' HH'h'mm`,
           { locale: pt }
         ),
         file: response.data.file.url,
