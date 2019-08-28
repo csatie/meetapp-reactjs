@@ -34,7 +34,6 @@ export function* signUp({ payload }) {
       name,
       email,
       password,
-      provider: true,
     });
   } catch (err) {
     toast.error('Falha no cadastro');

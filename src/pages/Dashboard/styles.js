@@ -52,7 +52,7 @@ export const Meetup = styled.li`
   color: #fff;
   padding: 20px;
 
-  opacity: ${props => (props.past ? 0.6 : 1)};
+  opacity: ${props => (props.past ? 0.2 : 1)};
 
   span {
     align-items: center;
