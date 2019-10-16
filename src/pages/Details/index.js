@@ -51,7 +51,7 @@ export default function Detail({ match }) {
         <div>
           <Link
             to={{
-              pathname: `/edit/${id}`,
+              pathname: `/meetup/${id}/edit`,
             }}
           >
             <button type="button" className="btnBlue">
@@ -59,7 +59,7 @@ export default function Detail({ match }) {
               <span>Editar</span>
             </button>
           </Link>
-          <Link to="/details">
+          <Link to="/">
             <button type="button" onClick={() => handleDelete()}>
               <MdDeleteForever size={20} />
               <span>Cancelar</span>

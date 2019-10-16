@@ -51,7 +51,6 @@ export const Meetup = styled.li`
   margin-bottom: 10px;
   color: #fff;
   padding: 20px;
-
   opacity: ${props => (props.past ? 0.2 : 1)};
 
   span {

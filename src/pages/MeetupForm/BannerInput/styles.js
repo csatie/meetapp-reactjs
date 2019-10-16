@@ -1,19 +1,23 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 940px;
-  height: 300px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 4px;
-  margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
+  label {
+    width: 940px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
   img {
-    max-width: 900px;
-    max-height: 260px;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
     object-fit: cover;
   }
 

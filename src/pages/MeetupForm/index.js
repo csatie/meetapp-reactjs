@@ -9,6 +9,7 @@ import pt from 'date-fns/locale/pt';
 import * as Yup from 'yup';
 
 import { MdAddCircleOutline } from 'react-icons/md';
+import history from '~/services/history';
 import api from '~/services/api';
 
 import BannerInput from './BannerInput';
@@ -29,7 +30,12 @@ export default function MeetupForm({ match }) {
 
   const dispatch = useDispatch();
   const [meetup, setMeetup] = useState([]);
+  const [description, setDescription] = useState('');
   const [startDate, setDate] = useState();
+
+  useEffect(() => {
+    setDescription(meetup.description);
+  }, [meetup]);
 
   useEffect(() => {
     async function loadMeetup() {
@@ -62,10 +68,12 @@ export default function MeetupForm({ match }) {
       };
       if (id) {
         await api.put(`meetups/${id}`, meetupData);
-        toast.success('Meetup atualizado com sucesso');
+        toast.success('Meetup atualizado com sucesso!');
+        history.push('/dashboard');
       } else {
         await api.post('meetups', meetupData);
-        toast.success('Meetup criado com sucesso');
+        toast.success('Meetup criado com sucesso!');
+        history.push('/dashboard');
       }
     } catch (error) {
       console.tron.log(data);
@@ -78,7 +86,13 @@ export default function MeetupForm({ match }) {
       <Form initialData={meetup} schema={schema} onSubmit={handleSubmit}>
         <BannerInput name="file_id" />
         <Input name="name" placeholder="Título do meetup" />
-        <Input name="description" placeholder="Descrição completa" multiline />
+        <Input
+          name="description"
+          placeholder="Descrição completa"
+          multiline
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+        />
         <DatePicker
           name="date"
           placeholderText="Data e hora"
